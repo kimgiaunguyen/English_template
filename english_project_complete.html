@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>☕ English Study Plan — Project Setup</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:#C49A3C;min-height:100vh;}
+
+/* ── NAV TABS ── */
+.nav{display:flex;background:#2A1500;padding:0;border-bottom:3px solid #C49A3C;}
+.nav-tab{flex:1;padding:16px 10px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;color:#A07040;transition:all .2s;border-bottom:3px solid transparent;margin-bottom:-3px;}
+.nav-tab.active{color:#F5C842;border-bottom-color:#F5C842;}
+.nav-tab:hover:not(.active){color:#D4AA50;}
+
+/* ── VIEWS ── */
+.view{display:none;padding:28px 20px 64px;min-height:calc(100vh - 52px);}
+.view.active{display:block;}
+
+/* ══════════════════════
+   SECTION 1 — PROMPT
+══════════════════════ */
+.prompt-wrap{max-width:680px;margin:0 auto;}
+.prompt-header{text-align:center;margin-bottom:28px;}
+.prompt-header h1{font-family:'Lora',serif;font-size:22px;font-weight:600;color:#2A1500;margin-bottom:6px;}
+.prompt-header p{font-size:12px;color:#5A3010;letter-spacing:.04em;}
+
+.step-card{background:#F5E6C8;border:2px solid #C49A3C;border-radius:20px;padding:22px 24px;margin-bottom:16px;}
+.step-num{display:inline-block;background:#2A1500;color:#F5C842;font-size:10px;font-weight:800;padding:3px 12px;border-radius:20px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;}
+.step-title{font-size:15px;font-weight:700;color:#1A0D00;margin-bottom:8px;}
+.step-desc{font-size:12px;color:#5A3010;line-height:1.7;margin-bottom:14px;}
+
+.prompt-box{background:#1A0D00;border-radius:14px;padding:20px;position:relative;}
+.prompt-box pre{font-family:'DM Sans',sans-serif;font-size:11px;color:#E8D0A0;line-height:1.8;white-space:pre-wrap;word-break:break-word;}
+.copy-btn{position:absolute;top:12px;right:12px;background:#C49A3C;border:none;border-radius:8px;padding:6px 14px;font-size:10px;font-weight:700;color:#1A0D00;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .2s;}
+.copy-btn:hover{background:#F5C842;}
+.copy-btn.copied{background:#3A7020;color:#fff;}
+
+.checkin-box{background:#2A1500;border-radius:14px;padding:18px 20px;}
+.checkin-title{font-size:11px;font-weight:700;color:#F5C842;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+.checkin-example{font-family:'DM Sans',sans-serif;font-size:12px;color:#E8D0A0;line-height:1.8;}
+.checkin-example strong{color:#F5C842;}
+
+/* ══════════════════════
+   SECTION 2 — DAILY SESSION
+══════════════════════ */
+.session-wrap{max-width:480px;margin:0 auto;}
+
+/* cappuccino card */
+.cap-card{background:#F5E6C8;border:2px solid #C49A3C;border-radius:24px;padding:24px;position:relative;overflow:hidden;}
+.cap-blob1{position:absolute;top:-55px;right:-55px;width:200px;height:200px;border-radius:50%;background:#D4AA50;opacity:.10;pointer-events:none;}
+.cap-blob2{position:absolute;bottom:-60px;left:-50px;width:180px;height:180px;border-radius:50%;background:#C49A3C;opacity:.08;pointer-events:none;}
+.cap-card>*{position:relative;z-index:1;}
+
+.cap-chip{display:inline-block;background:#2A1500;color:#F5C842;font-size:9px;font-weight:800;padding:4px 12px;border-radius:20px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+.cap-day{font-size:10px;font-weight:700;color:#6B3D10;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px;}
+.cap-title{font-family:'Lora',serif;font-size:20px;font-weight:600;color:#1A0D00;line-height:1.2;margin-bottom:4px;}
+.cap-theme{font-size:12px;color:#7A4A18;font-weight:400;}
+.cap-badges{display:flex;gap:5px;margin-top:13px;flex-wrap:wrap;}
+.cap-badge{font-size:9px;font-weight:700;padding:4px 11px;border-radius:20px;background:#EDD9A3;border:2px solid #B8882A;color:#3D2008;letter-spacing:.04em;}
+
+.cap-prog{display:flex;align-items:center;gap:10px;margin:18px 0;}
+.cap-prog-lbl{font-size:9px;font-weight:700;color:#6B3D10;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+.cap-prog-track{flex:1;height:8px;background:#DEC98A;border-radius:8px;overflow:hidden;}
+.cap-prog-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,#6B3D10,#C49A3C);transition:width .5s;}
+.cap-prog-val{font-size:10px;font-weight:700;color:#6B3D10;white-space:nowrap;}
+
+/* block cards inside */
+.cap-block{background:#FFF8EC;border:2px solid #DEC98A;border-radius:18px;padding:18px 20px;margin-bottom:12px;}
+.cap-block.active-block{border-color:#C49A3C;box-shadow:0 2px 12px rgba(196,154,60,.2);}
+.cap-block.done-block{opacity:.65;}
+.cap-bhead{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid #EDD9A3;}
+.cap-bicon{width:38px;height:38px;border-radius:12px;background:#EDD9A3;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.cap-btitle{font-size:14px;font-weight:700;color:#1A0D00;}
+.cap-bsub{font-size:11px;font-weight:400;color:#7A4A18;margin-top:2px;}
+.cap-bstatus{margin-left:auto;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;}
+.status-done{background:#1A3A0A;color:#7DD870;border:1.5px solid #3A7020;}
+.status-now{background:#6B3D10;color:#F5C842;border:1.5px solid #C49A3C;}
+.status-wait{background:#EDD9A3;color:#9A7040;border:1.5px solid #C4A060;}
+
+.cap-note{border-radius:10px;padding:9px 13px;font-size:12px;font-weight:500;margin-bottom:8px;border:2px solid;line-height:1.5;display:flex;align-items:flex-start;gap:8px;}
+.cap-note.ret{background:#EDD9A3;border-color:#C49A3C;color:#5A2E00;}
+.cap-note.mas{background:#D8EECB;border-color:#6A9840;color:#1E5A10;}
+
+.cap-phrase{display:grid;grid-template-columns:28px 1fr;gap:12px;padding:11px 0;border-bottom:2px solid #EDD9A3;}
+.cap-phrase:last-of-type{border-bottom:none;}
+.cap-pnum{width:27px;height:27px;border-radius:8px;background:#EDD9A3;border:2px solid #C49A3C;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#3D2008;flex-shrink:0;margin-top:2px;}
+.cap-ptext{font-family:'Lora',serif;font-size:14px;font-weight:600;color:#1A0D00;margin-bottom:4px;}
+.cap-pex{font-size:12px;font-style:italic;font-weight:400;color:#7A4A18;line-height:1.5;}
+.cap-psay{font-size:11px;font-weight:600;color:#8B4513;margin-top:5px;}
+
+.cap-speak{background:#2A1500;border-radius:14px;padding:14px 16px;margin-top:14px;border:2px solid #6B3D10;}
+.cap-speak-lbl{font-size:10px;font-weight:800;color:#F5C842;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.cap-speak-txt{font-size:12px;color:#E8D0A0;line-height:1.75;font-weight:400;}
+
+.cap-btn{width:100%;margin-top:14px;padding:13px;border-radius:14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s;border:2px solid;letter-spacing:.03em;}
+.cap-btn.primary{background:#2A1500;border-color:#2A1500;color:#F5E6C8;}
+.cap-btn.primary:hover{background:#8B4513;border-color:#8B4513;}
+.cap-btn.secondary{background:#EDD9A3;border-color:#C49A3C;color:#3D2008;}
+.cap-btn.secondary:hover{background:#C49A3C;border-color:#C49A3C;color:#fff;}
+
+.cap-b2{font-size:12px;line-height:2.1;font-weight:400;color:#5A3010;}
+.cap-b2-key{font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#3D2008;}
+
+.cap-footer{background:#2A1500;border-radius:16px;padding:16px 18px;}
+.cap-ft-lbl{font-size:10px;font-weight:700;color:#D4AA50;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;}
+.cap-pill-row{display:flex;gap:6px;flex-wrap:wrap;}
+.cap-pill{font-size:12px;padding:6px 15px;border-radius:20px;font-weight:600;border:2px solid;}
+.cap-pill.done{background:#1A3A0A;border-color:#3A7020;color:#7DD870;}
+.cap-pill.now{background:#6B3D10;border-color:#C49A3C;color:#F5C842;}
+.cap-pill.wait{background:#3D2008;border-color:#6B3D10;color:#906030;}
+
+/* quiz area */
+.quiz-area{display:none;margin-top:14px;}
+.quiz-area.active{display:block;}
+.quiz-q{background:#EDD9A3;border-radius:12px;padding:14px 16px;border:2px solid #C49A3C;margin-bottom:12px;}
+.quiz-q-lbl{font-size:10px;font-weight:800;color:#6B3D10;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.quiz-q-text{font-size:13px;font-weight:600;color:#1A0D00;line-height:1.5;}
+.quiz-input{width:100%;padding:11px 14px;border-radius:10px;border:2px solid #C49A3C;background:#FFF8EC;font-family:'DM Sans',sans-serif;font-size:13px;color:#1A0D00;margin-top:8px;outline:none;}
+.quiz-input:focus{border-color:#8B4513;}
+.quiz-result{display:none;margin-top:8px;font-size:12px;font-weight:600;padding:8px 12px;border-radius:8px;}
+.quiz-result.correct{background:#D8EECB;color:#1E5A10;border:1.5px solid #6A9840;}
+.quiz-result.wrong{background:#F5D0C8;color:#5A1800;border:1.5px solid #C44020;}
+
+/* session end */
+.session-end{display:none;text-align:center;padding:20px;}
+.session-end.active{display:block;}
+.end-icon{font-size:48px;margin-bottom:16px;}
+.end-title{font-family:'Lora',serif;font-size:22px;font-weight:600;color:#1A0D00;margin-bottom:8px;}
+.end-sub{font-size:13px;color:#5A3010;line-height:1.7;}
+
+/* ── SECTION 3 — PROMPT VISUAL ── */
+.instr-wrap{max-width:680px;margin:0 auto;}
+.instr-card{background:#F5E6C8;border:2px solid #C49A3C;border-radius:20px;padding:22px 24px;margin-bottom:16px;}
+.instr-title{font-size:14px;font-weight:700;color:#1A0D00;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.instr-body{font-size:12px;color:#5A3010;line-height:1.8;}
+.instr-body strong{color:#1A0D00;font-weight:700;}
+.instr-tag{display:inline-block;background:#2A1500;color:#F5C842;font-size:9px;font-weight:800;padding:2px 9px;border-radius:10px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px;}
+.week-row{display:grid;grid-template-columns:90px 1fr;border-bottom:1px solid #DEC98A;padding:7px 0;}
+.week-row:last-child{border-bottom:none;}
+.week-n{font-size:11px;font-weight:700;color:#8B4513;}
+.week-t{font-size:11px;color:#3D2008;}
+.week-d{font-size:10px;color:#9A7040;}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<div class="nav">
+  <div class="nav-tab active" onclick="showTab('setup')">① Setup prompt</div>
+  <div class="nav-tab" onclick="showTab('session')">② Daily session</div>
+  <div class="nav-tab" onclick="showTab('roadmap')">③ Roadmap</div>
+</div>
+
+<!-- ════════════════════════════
+     TAB 1 — SETUP PROMPT
+════════════════════════════ -->
+<div id="t-setup" class="view active" style="background:#C49A3C;">
+  <div class="prompt-wrap">
+    <div class="prompt-header">
+      <h1>☕ Project Setup</h1>
+      <p>Copy the prompt below → paste into Claude Project instructions → you are ready</p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">Step 1 — Copy this prompt</div>
+      <div class="step-title">Project Instructions — paste everything below</div>
+      <div class="step-desc">Go to Claude.ai → Projects → New Project → Project Instructions → paste this entire block → Save.</div>
+      <div class="prompt-box">
+        <button class="copy-btn" onclick="copyPrompt()">Copy</button>
+        <pre id="prompt-text">You are my personal English speaking coach. I am Vietnamese, based in Ho Chi Minh City. My current level is intermediate. My goal is to speak fluent business English for job interviews and workplace communication in Marketing, CRM, and Customer Experience roles.
+
+My study plan: 2 hours daily, 6 days a week (Sunday is review day). 3-month plan: 4 June 2026 → 3 September 2026.
+
+My target roles: Marketing Manager · CRM Manager · Customer Experience Manager · Project Manager
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HOW TO START EVERY SESSION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+When I send my check-in, always open my session exactly like this:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+☕ DAY [X] · WEEK [X] · [DATE]
+🎯 THEME: [Week theme]
+📍 PHASE: [Foundation / Speaking / Interview Ready]
+⚡ TYPE: [Shadowing Day / Speaking Day / Live Practice / Review]
+⏱ 2 hours · 4 blocks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Then start Block 1 immediately.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BLOCK 1 — VOCABULARY (20 min)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Present 8 phrases like this:
+
+☕ VOCABULARY · BLOCK 1 · 20 MIN
+Today's theme: [theme]
+━━━━━━━━━━━━━━━━━━━━━━
+
+1️⃣  PHRASE: "[phrase]"
+    ✏️  "[example sentence]"
+    👄 Say it 3× out loud now.
+
+[continue to 8]
+
+🔁 RETURNING (wrong last time): [list or "none"]
+✅ MASTERED: [X] phrases retired
+
+After phrases, run the quiz:
+Q → "Use this when describing what you managed."
+Your answer? ___
+
+After quiz show:
+📊 QUIZ RESULTS
+✅ Correct: [list]
+❌ Wrong — back tomorrow: [list]
+⭐ Mastered (3× correct): [list]
+
+End Block 1 with:
+🗣 SPEAKING TASK — say 3 sentences using today's phrases about YOUR experience.
+Type DONE when finished. I will not move to Block 2 until you do.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BLOCK 2 — SHADOWING (30 min)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎙 BLOCK 2 · 30 MIN · SHADOWING
+📺 TODAY'S SOURCE: [video + link]
+⏱ WATCH: minutes [X] to [X] only
+🎯 FOCUS TODAY: [stress / pausing / linking]
+
+HOW TO SHADOW:
+1️⃣ Listen to one sentence
+2️⃣ Pause
+3️⃣ Repeat out loud — match rhythm & stress
+4️⃣ Move to next sentence
+
+📱 RECORD yourself saying one paragraph. Play back. Compare to original.
+
+🗣 SPEAKING TASK: Record your introduction. Type DONE when recorded.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BLOCK 3 — LISTENING (20 min)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+👂 BLOCK 3 · 20 MIN · LISTENING
+🎧 TODAY'S PODCAST: [name + where to find]
+▶️  Play at 1.0× — NO transcript first listen
+
+After listening:
+📝 Write 3 new phrases you heard
+🔍 Look them up → add to vocabulary journal
+
+🗣 SPEAKING TASK: Summarise episode in 3–4 sentences OUT LOUD. Type DONE.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BLOCK 4 — SPEAKING OUTPUT (30 min)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎤 BLOCK 4 · 30 MIN · SPEAKING OUTPUT
+🎯 TODAY'S TOPIC: [topic]
+
+📋 YOUR SCRIPT — adapt with your real experience:
+"[script]"
+
+STEPS:
+1️⃣ Read script once silently
+2️⃣ Put it away — speak from memory
+3️⃣ 📱 Record yourself
+4️⃣ Listen back — note 2 things to improve
+5️⃣ Do it again fixing those 2 things
+6️⃣ Save final recording
+
+When done, tell me:
+- One thing that felt easier today
+- One thing still difficult
+I will give you coaching feedback.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+END OF EVERY SESSION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Always close with:
+
+🏁 SESSION COMPLETE · DAY [X] DONE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 TODAY'S SUMMARY:
+✅ Vocabulary: [X] new · [X] returning · [X] mastered
+🎙 Shadowing: [source] · [focus]
+👂 Listening: [podcast]
+🎤 Speaking: [topic]
+❌ Phrases back tomorrow: [list]
+🌟 Well done today: [specific praise]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 TOMORROW — DAY [X+1]:
+⚡ Type: [day type]
+🎯 Topic: [tomorrow's topic]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💪 SEE YOU TOMORROW. DON'T SKIP THE RECORDING.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT TO TRACK ACROSS SESSIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Current day and week
+- Wrong phrases → return next session
+- Mastered phrases → retired after 3× correct
+- Recurring grammar mistakes → flag when repeated
+- My STAR stories → remember and help me improve
+- Block 4 topics covered → never repeat
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13-WEEK ROADMAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Week 1 (Jun 4–10): Self-introduction mastery
+Week 2 (Jun 11–17): Describing work experience
+Week 3 (Jun 18–24): STAR method answers
+Week 4 (Jun 25–Jul 1): Fluency checkpoint + articles
+Week 5 (Jul 2–8): Explaining complex ideas simply
+Week 6 (Jul 9–15): Difficult interview questions
+Week 7 (Jul 16–22): Marketing & CRM vocabulary deep dive
+Week 8 (Jul 23–29): Customer Experience & Project Mgmt language
+Week 9 (Jul 30–Aug 5): Full mock interview simulations
+Week 10 (Aug 6–12): Professional workplace communication
+Week 11 (Aug 13–19): Interview simulation — full pressure
+Week 12 (Aug 20–26): Final polish
+Week 13 (Aug 27–Sep 3): Buffer — review and reinforce
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WEEKLY SCHEDULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Mon / Wed / Fri → Shadowing focus day
+Tue / Thu → Speaking output focus day
+Sat → Live practice (Tandem / iTalki)
+Sun → Weekly review
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SHADOWING SOURCES BY WEEK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Week 1–4: English with Lucy — "How to Introduce Yourself Professionally"
+Week 5–8: Simon Sinek TED Talk — "Start With Why"
+Week 9–12: Brené Brown TED Talk — "The Power of Vulnerability"
+Week 13: Mock marketing/CX interview videos on YouTube
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LISTENING SOURCES BY WEEK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Week 1–8: BBC Business Daily podcast
+Week 9–13: Marketing Over Coffee · The CX Leader Podcast
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+VOCABULARY SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+I do not use Anki. You are my flashcard trainer.
+- Give me 8 new phrases per Block 1
+- Quiz me after
+- Track wrong phrases → return next session
+- Retire phrases correct 3 times in a row
+- Never repeat a Block 4 topic already covered
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COACHING STYLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Be my coach, not just an assistant. Push me to speak. Do not let me skip speaking tasks. If I say I am tired, encourage me firmly but kindly. Always end each block with a speaking task I must complete before moving on.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DAILY CHECK-IN FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+I will say: "Day [X], Week [X] — [theme]. Wrong phrases: [X]. Speaking: completed/skipped. Ready."
+
+When I send this → immediately start Block 1. No extra questions.
+
+If I just say "start" → ask me these 3 only, then begin:
+1. What day and week?
+2. Any wrong phrases from yesterday?
+3. Did you complete the speaking task?</pre>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">Step 2 — Your daily check-in</div>
+      <div class="step-title">Send this every morning to start your session</div>
+      <div class="step-desc">Copy this check-in format. Fill in your details. Send it to your Claude Project. Your session starts immediately.</div>
+      <div class="checkin-box">
+        <div class="checkin-title">📋 Check-in template</div>
+        <div class="checkin-example">
+          <strong>"Day [X], Week [X] — [theme].</strong><br>
+          Wrong phrases: [list or 'none'].<br>
+          Speaking task: completed / skipped.<br>
+          <strong>Ready."</strong><br><br>
+          Example first day:<br>
+          <strong>"Day 1, Week 1 — Self-introduction mastery. Wrong phrases: none. Speaking task: not yet. Ready."</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">Step 3 — Open Tab 2 every session</div>
+      <div class="step-title">Use the Daily Session tab as your visual guide</div>
+      <div class="step-desc">While Claude coaches you in the Project chat, keep this file open on your phone or second screen. It shows your blocks, phrases, progress, and speaking tasks in the cappuccino theme you chose. Follow both together.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     TAB 2 — DAILY SESSION
+════════════════════════════ -->
+<div id="t-session" class="view" style="background:#C49A3C;">
+  <div class="session-wrap">
+
+    <div class="cap-card" id="main-card">
+      <div class="cap-blob1"></div>
+      <div class="cap-blob2"></div>
+
+      <div class="cap-chip">☕ Day 1 · Week 1</div>
+      <div class="cap-day">4 June 2026 · Foundation phase</div>
+      <div class="cap-title">Self-introduction mastery</div>
+      <div class="cap-theme">Marketing · CRM · Customer Experience</div>
+      <div class="cap-badges">
+        <span class="cap-badge" id="day-type-badge">Shadowing day</span>
+        <span class="cap-badge">2 hours · 4 blocks</span>
+        <span class="cap-badge">Foundation</span>
+      </div>
+
+      <div class="cap-prog">
+        <span class="cap-prog-lbl">Journey</span>
+        <div class="cap-prog-track"><div class="cap-prog-fill" id="prog-fill" style="width:1%"></div></div>
+        <span class="cap-prog-val" id="prog-val">Day 1 / 90</span>
+      </div>
+
+      <!-- BLOCK 1 -->
+      <div class="cap-block active-block" id="block1">
+        <div class="cap-bhead">
+          <div class="cap-bicon">📚</div>
+          <div>
+            <div class="cap-btitle">Block 1 — Vocabulary warm-up</div>
+            <div class="cap-bsub">20 minutes · 8 phrases today</div>
+          </div>
+          <span class="cap-bstatus status-now">Now</span>
+        </div>
+        <div class="cap-note ret"><span style="flex-shrink:0">↩</span>Returning phrases — none yet, this is your first session</div>
+        <div class="cap-note mas"><span style="flex-shrink:0">✓</span>Mastered so far — 0 phrases retired</div>
+
+        <div class="cap-phrase"><div class="cap-pnum">1</div><div><div class="cap-ptext">"responsible for"</div><div class="cap-pex">"I am responsible for managing customer relationships across 3 channels."</div><div class="cap-psay">→ Say it 3 times aloud</div></div></div>
+        <div class="cap-phrase"><div class="cap-pnum">2</div><div><div class="cap-ptext">"my background is in"</div><div class="cap-pex">"My background is in marketing and CRM strategy."</div><div class="cap-psay">→ Say it 3 times aloud</div></div></div>
+        <div class="cap-phrase"><div class="cap-pnum">3</div><div><div class="cap-ptext">"I specialise in"</div><div class="cap-pex">"I specialise in customer experience and retention."</div><div class="cap-psay">→ Say it 3 times aloud</div></div></div>
+        <div class="cap-phrase"><div class="cap-pnum">4</div><div><div class="cap-ptext">"I am passionate about"</div><div class="cap-pex">"I am passionate about using data to improve customer satisfaction."</div><div class="cap-psay">→ Say it 3 times aloud</div></div></div>
+        <div class="cap-phrase"><div class="cap-pnum">5</div><div><div class="cap-ptext">"I have X years of experience in"</div><div class="cap-pex">"I have 4 years of experience in digital marketing and CRM."</div><div class="cap-psay">→ Say it 3 times aloud</div></div></div>
+        <div class="cap-phrase"><div class="cap-pnum">6</div><div><div class="cap-ptext">"my key strength is"</div><div class="cap-pex">"My key strength is turning customer insights into actionable strategies."</div><div class="cap-psay">→ Say it 3 times aloud</div></div></div>
+        <div class="cap-phrase"><div class="cap-pnum">7</div><div><div class="cap-ptext">"I have worked closely with"</div><div class="cap-pex">"I have worked closely with the sales and product teams."</div><div class="cap-psay">→ Say it 3 times aloud</div></div></div>
+        <div class="cap-phrase"><div class="cap-pnum">8</div><div><div class="cap-ptext">"I am looking for a role where"</div><div class="cap-pex">"I am looking for a role where I can apply my CX expertise at scale."</div><div class="cap-psay">→ Say it 3 times aloud</div></div></div>
+
+        <!-- Quiz -->
+        <div class="quiz-area" id="quiz-area">
+          <div style="font-size:11px;font-weight:700;color:#6B3D10;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">📊 Quick Quiz</div>
+          <div class="quiz-q">
+            <div class="quiz-q-lbl">Question 1 of 3</div>
+            <div class="quiz-q-text">Use this phrase when describing what you managed or oversaw in your job.</div>
+            <input class="quiz-input" id="q1" placeholder="Type the phrase here..." onkeyup="checkQ(1,'responsible for')">
+            <div class="quiz-result" id="r1"></div>
+          </div>
+          <div class="quiz-q">
+            <div class="quiz-q-lbl">Question 2 of 3</div>
+            <div class="quiz-q-text">Use this to describe your professional history and field of work.</div>
+            <input class="quiz-input" id="q2" placeholder="Type the phrase here..." onkeyup="checkQ(2,'my background is in')">
+            <div class="quiz-result" id="r2"></div>
+          </div>
+          <div class="quiz-q">
+            <div class="quiz-q-lbl">Question 3 of 3</div>
+            <div class="quiz-q-text">Use this to tell the interviewer your area of deep expertise.</div>
+            <input class="quiz-input" id="q3" placeholder="Type the phrase here..." onkeyup="checkQ(3,'i specialise in')">
+            <div class="quiz-result" id="r3"></div>
+          </div>
+        </div>
+
+        <div class="cap-speak">
+          <div class="cap-speak-lbl">🗣 Speaking task</div>
+          <div class="cap-speak-txt">Take a breath. Say 3 sentences using today's phrases about your own real experience. No rush. Come back to Claude chat and type <strong>DONE</strong> when finished — your coach won't move to Block 2 until you do.</div>
+        </div>
+        <button class="cap-btn primary" onclick="toggleQuiz()">Quiz me on these phrases →</button>
+        <button class="cap-btn secondary" style="margin-top:8px;" onclick="markDone(1)">✓ Block 1 done — move to Block 2</button>
+      </div>
+
+      <!-- BLOCK 2 -->
+      <div class="cap-block" id="block2">
+        <div class="cap-bhead">
+          <div class="cap-bicon">🎙</div>
+          <div>
+            <div class="cap-btitle">Block 2 — Shadowing</div>
+            <div class="cap-bsub">30 minutes · English with Lucy</div>
+          </div>
+          <span class="cap-bstatus status-wait" id="b2-status">Waiting</span>
+        </div>
+        <div class="cap-b2">
+          <div class="b2-row"><span class="cap-b2-key">Watch —</span> English with Lucy · "How to Introduce Yourself Professionally" (YouTube)</div>
+          <div class="b2-row"><span class="cap-b2-key">Segment —</span> first 3 minutes only, no need to rush</div>
+          <div class="b2-row"><span class="cap-b2-key">Focus —</span> sentence stress and natural rhythm</div>
+          <div class="b2-row"><span class="cap-b2-key">Record —</span> one paragraph on your phone, play it back, compare</div>
+        </div>
+        <div class="cap-speak" style="margin-top:14px;">
+          <div class="cap-speak-lbl">🗣 Speaking task</div>
+          <div class="cap-speak-txt">Record yourself saying your professional introduction. Play it back. Does the rhythm match Lucy's? Type <strong>DONE</strong> in Claude chat when recorded.</div>
+        </div>
+        <button class="cap-btn secondary" onclick="markDone(2)" style="margin-top:12px;">✓ Block 2 done — move to Block 3</button>
+      </div>
+
+      <!-- BLOCK 3 -->
+      <div class="cap-block" id="block3">
+        <div class="cap-bhead">
+          <div class="cap-bicon">👂</div>
+          <div>
+            <div class="cap-btitle">Block 3 — Listening</div>
+            <div class="cap-bsub">20 minutes · BBC Business Daily</div>
+          </div>
+          <span class="cap-bstatus status-wait" id="b3-status">Waiting</span>
+        </div>
+        <div class="cap-b2">
+          <div class="b2-row"><span class="cap-b2-key">Listen —</span> BBC Business Daily · latest episode · no transcript first</div>
+          <div class="b2-row"><span class="cap-b2-key">Speed —</span> 1.0× — do not slow it down</div>
+          <div class="b2-row"><span class="cap-b2-key">Note —</span> 3 phrases you heard but don't know — look them up</div>
+        </div>
+        <div class="cap-speak" style="margin-top:14px;">
+          <div class="cap-speak-lbl">🗣 Speaking task</div>
+          <div class="cap-speak-txt">Summarise the episode in 3–4 sentences out loud. Your own words, no reading. Start: "Today's episode was about..." Type <strong>DONE</strong> in Claude chat.</div>
+        </div>
+        <button class="cap-btn secondary" onclick="markDone(3)" style="margin-top:12px;">✓ Block 3 done — move to Block 4</button>
+      </div>
+
+      <!-- BLOCK 4 -->
+      <div class="cap-block" id="block4">
+        <div class="cap-bhead">
+          <div class="cap-bicon">🎤</div>
+          <div>
+            <div class="cap-btitle">Block 4 — Speaking output</div>
+            <div class="cap-bsub">30 minutes · Today's performance</div>
+          </div>
+          <span class="cap-bstatus status-wait" id="b4-status">Waiting</span>
+        </div>
+        <div class="cap-b2">
+          <div class="b2-row"><span class="cap-b2-key">Topic —</span> "Tell me about yourself" — speak for 2 minutes non-stop</div>
+          <div class="b2-row"><span class="cap-b2-key">Structure —</span> Present role → Past experience → Why this role</div>
+          <div class="b2-row"><span class="cap-b2-key">Record —</span> every attempt · listen back · note 2 improvements · repeat</div>
+        </div>
+        <div class="cap-speak" style="margin-top:14px;">
+          <div class="cap-speak-lbl">🗣 Script to adapt</div>
+          <div class="cap-speak-txt">"My background is in [field]. I have [X] years of experience in [area]. I specialise in [skill] and I am passionate about [interest]. My key strength is [strength]. I am looking for a role where I can [goal]."</div>
+        </div>
+        <button class="cap-btn primary" onclick="markDone(4)" style="margin-top:12px;">✓ Block 4 done — complete session ☕</button>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="cap-footer" id="session-footer">
+        <div class="cap-ft-lbl">Session today</div>
+        <div class="cap-pill-row">
+          <span class="cap-pill wait" id="pill1">Block 1</span>
+          <span class="cap-pill wait" id="pill2">Block 2</span>
+          <span class="cap-pill wait" id="pill3">Block 3</span>
+          <span class="cap-pill wait" id="pill4">Block 4</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SESSION COMPLETE -->
+    <div class="cap-card session-end" id="session-end" style="display:none;text-align:center;padding:32px 24px;">
+      <div style="font-size:52px;margin-bottom:16px;">☕</div>
+      <div style="font-family:'Lora',serif;font-size:22px;font-weight:600;color:#1A0D00;margin-bottom:10px;">Session complete!</div>
+      <div style="font-size:13px;color:#5A3010;line-height:1.8;margin-bottom:20px;">
+        Day 1 of 90 done.<br>
+        Don't forget to listen to your recordings.<br>
+        See you tomorrow — same time, same coffee. ☕
+      </div>
+      <div style="background:#2A1500;border-radius:14px;padding:14px 16px;text-align:left;margin-bottom:16px;">
+        <div style="font-size:10px;font-weight:800;color:#F5C842;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Tomorrow — Day 2</div>
+        <div style="font-size:12px;color:#E8D0A0;line-height:1.8;">⚡ Type: Speaking day<br>🎯 Topic: Describe your work experience<br>📚 Vocab: Achievement language — managed, led, achieved</div>
+      </div>
+      <button class="cap-btn secondary" onclick="resetSession()">Start a new session</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     TAB 3 — ROADMAP
+════════════════════════════ -->
+<div id="t-roadmap" class="view" style="background:#C49A3C;">
+  <div class="instr-wrap">
+
+    <div class="instr-card">
+      <div class="instr-tag">3-month overview</div>
+      <div class="instr-title">☕ 13-Week Study Roadmap</div>
+      <div class="instr-body" style="margin-top:8px;">
+        <strong>Phase 1 (Weeks 1–4)</strong> Foundation · Jun 4 – Jul 1<br>
+        <strong>Phase 2 (Weeks 5–8)</strong> Speaking Confidence · Jul 2 – Jul 29<br>
+        <strong>Phase 3 (Weeks 9–13)</strong> Interview Ready · Jul 30 – Sep 3
+      </div>
+    </div>
+
+    <div class="instr-card">
+      <div class="instr-tag">Week by week</div>
+      <div style="margin-top:8px;">
+        <div class="week-row"><div class="week-n">Week 1</div><div><div class="week-t">Self-introduction mastery</div><div class="week-d">Jun 4–10 · Foundation</div></div></div>
+        <div class="week-row"><div class="week-n">Week 2</div><div><div class="week-t">Describing work experience</div><div class="week-d">Jun 11–17 · Foundation</div></div></div>
+        <div class="week-row"><div class="week-n">Week 3</div><div><div class="week-t">STAR method answers</div><div class="week-d">Jun 18–24 · Foundation</div></div></div>
+        <div class="week-row"><div class="week-n">Week 4</div><div><div class="week-t">Fluency checkpoint + articles</div><div class="week-d">Jun 25–Jul 1 · Foundation</div></div></div>
+        <div class="week-row"><div class="week-n">Week 5</div><div><div class="week-t">Explaining complex ideas simply</div><div class="week-d">Jul 2–8 · Speaking</div></div></div>
+        <div class="week-row"><div class="week-n">Week 6</div><div><div class="week-t">Difficult interview questions</div><div class="week-d">Jul 9–15 · Speaking</div></div></div>
+        <div class="week-row"><div class="week-n">Week 7</div><div><div class="week-t">Marketing & CRM vocabulary deep dive</div><div class="week-d">Jul 16–22 · Speaking</div></div></div>
+        <div class="week-row"><div class="week-n">Week 8</div><div><div class="week-t">CX & Project Management language</div><div class="week-d">Jul 23–29 · Speaking</div></div></div>
+        <div class="week-row"><div class="week-n">Week 9</div><div><div class="week-t">Full mock interview simulations</div><div class="week-d">Jul 30–Aug 5 · Interview</div></div></div>
+        <div class="week-row"><div class="week-n">Week 10</div><div><div class="week-t">Professional workplace communication</div><div class="week-d">Aug 6–12 · Interview</div></div></div>
+        <div class="week-row"><div class="week-n">Week 11</div><div><div class="week-t">Interview simulation — full pressure</div><div class="week-d">Aug 13–19 · Interview</div></div></div>
+        <div class="week-row"><div class="week-n">Week 12</div><div><div class="week-t">Final polish</div><div class="week-d">Aug 20–26 · Interview</div></div></div>
+        <div class="week-row"><div class="week-n">Week 13</div><div><div class="week-t">Buffer — review and reinforce</div><div class="week-d">Aug 27–Sep 3 · Interview</div></div></div>
+      </div>
+    </div>
+
+    <div class="instr-card">
+      <div class="instr-tag">Daily schedule</div>
+      <div class="instr-body" style="margin-top:8px;">
+        <strong>Mon / Wed / Fri</strong> — Shadowing focus day<br>
+        <strong>Tue / Thu</strong> — Speaking output focus day<br>
+        <strong>Saturday</strong> — Live practice · Tandem or iTalki<br>
+        <strong>Sunday</strong> — Weekly review · listen to 7 recordings · plan next week
+      </div>
+    </div>
+
+    <div class="instr-card">
+      <div class="instr-tag">Sources</div>
+      <div class="instr-body" style="margin-top:8px;">
+        <strong>Shadowing Week 1–4:</strong> English with Lucy — "Introduce Yourself Professionally"<br>
+        <strong>Shadowing Week 5–8:</strong> Simon Sinek TED — "Start With Why"<br>
+        <strong>Shadowing Week 9–12:</strong> Brené Brown TED — "The Power of Vulnerability"<br>
+        <strong>Shadowing Week 13:</strong> Mock marketing interview videos (YouTube)<br><br>
+        <strong>Listening Week 1–8:</strong> BBC Business Daily podcast<br>
+        <strong>Listening Week 9–13:</strong> Marketing Over Coffee · The CX Leader Podcast
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── TAB SWITCHING ──
+function showTab(t) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(n => n.classList.remove('active'));
+  document.getElementById('t-' + t).classList.add('active');
+  const tabs = ['setup','session','roadmap'];
+  document.querySelectorAll('.nav-tab')[tabs.indexOf(t)].classList.add('active');
+}
+
+// ── QUIZ ──
+let quizOpen = false;
+function toggleQuiz() {
+  quizOpen = !quizOpen;
+  const qa = document.getElementById('quiz-area');
+  qa.classList.toggle('active', quizOpen);
+  document.querySelector('#block1 .cap-btn.primary').textContent = quizOpen ? 'Hide quiz ↑' : 'Quiz me on these phrases →';
+}
+
+function checkQ(n, answer) {
+  const input = document.getElementById('q'+n).value.trim().toLowerCase();
+  const result = document.getElementById('r'+n);
+  if (input.length < 3) { result.style.display='none'; return; }
+  result.style.display = 'block';
+  if (input.includes(answer.toLowerCase()) || answer.toLowerCase().includes(input)) {
+    result.className = 'quiz-result correct';
+    result.textContent = '✓ Correct! Great work — use it in a sentence now.';
+  } else if (input.length >= answer.length - 2) {
+    result.className = 'quiz-result wrong';
+    result.textContent = '✗ Not quite — the phrase is: "' + answer + '"';
+  }
+}
+
+// ── BLOCK PROGRESSION ──
+let currentBlock = 1;
+function markDone(blockNum) {
+  // mark pill done
+  const pill = document.getElementById('pill' + blockNum);
+  pill.className = 'cap-pill done';
+  pill.textContent = '✓ Block ' + blockNum;
+
+  // mark block done
+  const block = document.getElementById('block' + blockNum);
+  block.classList.remove('active-block');
+  block.classList.add('done-block');
+
+  // update status badge inside block
+  const statuses = {2:'b2-status',3:'b3-status',4:'b4-status'};
+
+  if (blockNum < 4) {
+    const next = blockNum + 1;
+    const nextBlock = document.getElementById('block' + next);
+    nextBlock.classList.add('active-block');
+    if (statuses[next]) {
+      document.getElementById(statuses[next]).className = 'cap-bstatus status-now';
+      document.getElementById(statuses[next]).textContent = 'Now';
+    }
+    // mark current pill now
+    const nextPill = document.getElementById('pill' + next);
+    nextPill.className = 'cap-pill now';
+    nextPill.textContent = 'Block ' + next + ' now';
+  } else {
+    // all done
+    setTimeout(() => {
+      document.getElementById('main-card').style.display = 'none';
+      const endCard = document.getElementById('session-end');
+      endCard.style.display = 'block';
+      endCard.classList.add('active');
+    }, 400);
+  }
+}
+
+function resetSession() {
+  document.getElementById('main-card').style.display = 'block';
+  document.getElementById('session-end').style.display = 'none';
+  [1,2,3,4].forEach(n => {
+    const b = document.getElementById('block'+n);
+    b.classList.remove('active-block','done-block');
+    const p = document.getElementById('pill'+n);
+    p.className = 'cap-pill wait';
+    p.textContent = 'Block ' + n;
+  });
+  document.getElementById('block1').classList.add('active-block');
+  ['b2-status','b3-status','b4-status'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el){el.className='cap-bstatus status-wait';el.textContent='Waiting';}
+  });
+  quizOpen = false;
+  document.getElementById('quiz-area').classList.remove('active');
+}
+
+// ── COPY PROMPT ──
+function copyPrompt() {
+  const text = document.getElementById('prompt-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2500);
+  });
+}
+</script>
+</body>
+</html>
